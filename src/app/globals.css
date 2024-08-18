@@ -78,7 +78,22 @@ li:hover{
   background: #EDE9FE;
   transition: all .3s ease-in-out
 }
-
+button{
+  padding: 0.8rem 1.8rem;
+  border-radius: 9999px;
+  font-weight: bold;
+  font-size: clamp(1.2rem, 1vw, 1.4rem);
+  transition: all ease-in-out .1s;
+}
+button:focus{
+  background-color: #7C3AED;
+  color: #fff
+}
+.tooltip{
+  background-color: #fff;
+  padding: .8rem;
+  box-shadow: 0.6rem 1,6rem rgba(15, 23, 42 / 0.15)
+}
 
 @layer base {
   * {
@@ -86,6 +101,7 @@ li:hover{
   }
   body {
     @apply bg-background text-foreground;
+    overflow: hidden;
     font-size: 1.6rem;
   }
 }
