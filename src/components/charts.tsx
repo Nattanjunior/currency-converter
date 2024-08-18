@@ -75,7 +75,7 @@ class ApexChart extends React.Component {
           min: 5,
           tickAmount: 4,
           labels: {
-            formatter: (value) => {
+            formatter: (value:any) => {
               return value.toFixed(1).replace('.', ',')
             },
           }
@@ -94,7 +94,7 @@ class ApexChart extends React.Component {
         },
         colors: ["#7C3AED"],
         tooltip: {
-          custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+          custom: function ({ series, seriesIndex, dataPointIndex, w }:any) {
             return `<div class= "tooltip">
           <span>${String(series[seriesIndex][dataPointIndex]).replace('.', ',')}</span>
           <span>${new Date(
@@ -125,7 +125,7 @@ class ApexChart extends React.Component {
   }
 
 
-  updateData(timeline) {
+  updateData(timeline:any) {
     this.setState({
       selection: timeline
     })
