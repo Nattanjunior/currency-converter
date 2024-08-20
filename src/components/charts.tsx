@@ -1,14 +1,19 @@
 'use client'
 
-'use client'
 import React from "react";
 
 import dynamic from 'next/dynamic';
 
 const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
-class ApexChart extends React.Component {
-  constructor(props:any) {
+interface ChartState {
+  series: Array<{ data: Array<{ x: number, y: number }> }>;
+  options: object;
+  selection: string;
+}
+
+class ApexChart extends React.Component<{}, ChartState> {
+  constructor(props: any) {
     super(props);
 
     this.state = {
@@ -75,7 +80,7 @@ class ApexChart extends React.Component {
           min: 5,
           tickAmount: 4,
           labels: {
-            formatter: (value:any) => {
+            formatter: (value: any) => {
               return value.toFixed(1).replace('.', ',')
             },
           }
@@ -94,7 +99,7 @@ class ApexChart extends React.Component {
         },
         colors: ["#7C3AED"],
         tooltip: {
-          custom: function ({ series, seriesIndex, dataPointIndex, w }:any) {
+          custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {
             return `<div class= "tooltip">
           <span>${String(series[seriesIndex][dataPointIndex]).replace('.', ',')}</span>
           <span>${new Date(
@@ -125,54 +130,54 @@ class ApexChart extends React.Component {
   }
 
 
-  updateData(timeline:any) {
+  updateData(timeline: any) {
     this.setState({
       selection: timeline
     })
 
-    switch (timeline) {
-      case 'one_day':
-        ApexCharts.exec(
-          'area-datetime',
-          'zoomX',
-          new Date('28 Jan 2013').getTime(),
-          new Date('27 Feb 2013').getTime()
-        )
-        break
-      case 'five_days':
-        ApexCharts.exec(
-          'area-datetime',
-          'zoomX',
-          new Date('27 Sep 2012').getTime(),
-          new Date('27 Feb 2013').getTime()
-        )
-        break
-      case 'one_year':
-        ApexCharts.exec(
-          'area-datetime',
-          'zoomX',
-          new Date('27 Feb 2012').getTime(),
-          new Date('27 Feb 2013').getTime()
-        )
-        break
-      case 'ytd':
-        ApexCharts.exec(
-          'area-datetime',
-          'zoomX',
-          new Date('01 Jan 2013').getTime(),
-          new Date('27 Feb 2013').getTime()
-        )
-        break
-      case 'all':
-        ApexCharts.exec(
-          'area-datetime',
-          'zoomX',
-          new Date('23 Jan 2012').getTime(),
-          new Date('27 Feb 2013').getTime()
-        )
-        break
-      default:
-    }
+    // switch (timeline) {
+    //   case 'one_day':
+    //     ApexCharts.exec(
+    //       'area-datetime',
+    //       'zoomX',
+    //       new Date('28 Jan 2013').getTime(),
+    //       new Date('27 Feb 2013').getTime()
+    //     )
+    //     break
+    //   case 'five_days':
+    //     ApexCharts.exec(
+    //       'area-datetime',
+    //       'zoomX',
+    //       new Date('27 Sep 2012').getTime(),
+    //       new Date('27 Feb 2013').getTime()
+    //     )
+    //     break
+    //   case 'one_year':
+    //     ApexCharts.exec(
+    //       'area-datetime',
+    //       'zoomX',
+    //       new Date('27 Feb 2012').getTime(),
+    //       new Date('27 Feb 2013').getTime()
+    //     )
+    //     break
+    //   case 'ytd':
+    //     ApexCharts.exec(
+    //       'area-datetime',
+    //       'zoomX',
+    //       new Date('01 Jan 2013').getTime(),
+    //       new Date('27 Feb 2013').getTime()
+    //     )
+    //     break
+    //   case 'all':
+    //     ApexCharts.exec(
+    //       'area-datetime',
+    //       'zoomX',
+    //       new Date('23 Jan 2012').getTime(),
+    //       new Date('27 Feb 2013').getTime()
+    //     )
+    //     break
+    //   default:
+    // }
   }
 
 
@@ -183,42 +188,42 @@ class ApexChart extends React.Component {
         <div id="chart" >
 
           <div id="chart-timeline">
-            <ReactApexChart options={this.state.options} series={this.state.series} type="area" height={256} />
+            <ReactApexChart options={this.state.options } series={this.state.series} type="area" height={256} />
           </div>
-          <div className="flex justify-between pl-[3rem] max-md:w-[25.6rem]  max-md:gap-0 max-md:px-0">
+          <div className="flex justify-between pl-[3rem] max-md:w-[25.6rem] max-md:pl-[3rem] max-md:-mt-4 ">
             <button id="one_day"
-              onClick={() => this.updateData('one_day')} className={(this.state.selection === 'one_month' ? 'active' : '')}>
+              onClick={() => { }}>
               1D
             </button>
 
             <button id="five_days"
 
-              onClick={() => this.updateData('five_days')} className={(this.state.selection === 'six_months' ? 'active' : '')}>
+              onClick={() => { }}>
               5D
             </button>
 
             <button id="one_months"
 
 
-              onClick={() => this.updateData('one_months')} className={(this.state.selection === 'one_year' ? 'active' : '')}>
+              onClick={() => { }}>
               1M
             </button>
 
             <button id="ytd"
 
-              onClick={() => this.updateData('ytd')} className={(this.state.selection === 'ytd' ? 'active' : '')}>
+              onClick={() => { }}>
               1A
             </button>
 
             <button id="all"
 
-              onClick={() => this.updateData('all')} className={(this.state.selection === 'all' ? 'active' : '')}>
+              onClick={() => { }}>
               5A
             </button>
             <button
 
-              onClick={() => this.updateData('all')} className={(this.state.selection === 'all' ? 'active' : '')}>
-              MÁX
+              onClick={() => { }}>
+                MÁX
             </button>
           </div>
         </div>
