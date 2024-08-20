@@ -5,7 +5,8 @@ import { Flags } from "./flags";
 
 import "/node_modules/flag-icons/css/flag-icons.min.css";
 import Image from "next/image";
-
+import { A } from "ollama/dist/shared/ollama.1164e541.js";
+import { METHODS } from "http";
 
 export type HandleProps = {
   flag: string
@@ -15,10 +16,11 @@ export type HandleProps = {
 export default function Inputs() {
   const [isChange, setIsChange] = useState(false)
   const [CurrencyToConvert, setCurrencyToConvert] = useState<HandleProps>({ flag: 'fi fi-br fis', name: 'BRL' })
-  const [CurrencyConverter, setCurrencyConverter] = useState<HandleProps>({ flag: 'fi fi-us fis', name: 'USD' })
+  const [CurrencyConvert, setCurrencyConvert] = useState<HandleProps>({ flag: 'fi fi-us fis', name: 'USD' })
   const [InputValue, setInputValue] = useState('')
   const [placeHolder, setPlaceHolder] = useState('$ 0,00')
   const MyInput = useRef<HTMLInputElement>(null)
+  const myDiv = useRef<HTMLDivElement>(null)
 
 
   const formatValue = (value: string) => {
@@ -41,11 +43,10 @@ export default function Inputs() {
 
   // trocando os valores selecionados pelo usuário!
   function exchangeValues() {
-    setCurrencyToConvert(CurrencyConverter)
-    setCurrencyConverter(CurrencyToConvert)
-    console.log(CurrencyConverter)
-    console.log(CurrencyToConvert)
+    setCurrencyToConvert(CurrencyConvert)
+    setCurrencyConvert(CurrencyToConvert)
     setIsChange(!isChange)
+
   }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,15 +54,29 @@ export default function Inputs() {
     setInputValue(formatValue(Value))
   }
 
-  useEffect(()=>{
-    // const fetchApiCoin = async ()=>{
-    //   try {
-    //       const response = await fetch('https://v6.exchangerate-api.com/v6/ SUA-CHAVE-API /par/ EUR / GBP / QUANTIDADE')
-    //   } catch (error) {
-    //     console.log(error)
-    //   }
-    // }
-  },[])
+  // useEffect(() => {
+  //   const fetchApiCoin = async () => {
+
+  //     const numericFormat = parseFloat(InputValue.replace(/[^\d.-]/g, ''))
+
+  //     if(isNaN(numericFormat)) return;
+      
+  //     try {
+  //       const response = await fetch(`https://v6.exchangerate-api.com/v6/5690198e76fb65359227a7be/par/${CurrencyToConvert.name}/${CurrencyConvert.name}/${numericFormat}`,{
+  //         method:'GET'
+  //       })
+
+
+  //       const data = await response.json()
+  //       console.log(data) 
+  //     } catch (error) {
+  //       console.log(error)
+  //     }
+  //   }
+  //   fetchApiCoin()
+  // }, [InputValue,CurrencyConvert,CurrencyToConvert ])
+
+
 
   return (
     <>
@@ -80,7 +95,9 @@ export default function Inputs() {
               value={InputValue}
               placeholder={placeHolder}
             />
-            <div className="absolute top-0 w-[12rem] z-50 right-0 h-[5.6rem] flex flex-col transition-all overflow-hidden hover:h-fit hover:overflow-visible  before:content-['|'] before:absolute before:text-darkSlate before:left-[-2px] before:top-6">
+            <div className="absolute top-0 w-[12rem] z-50 right-0 h-[5.6rem] flex flex-col transition-all overflow-hidden hover:h-fit hover:overflow-visible  before:content-['|'] before:absolute before:text-darkSlate before:left-[-2px] before:top-6"
+              ref={myDiv}
+            >
               <div className="flex py-6 transition-all ease-in-out justify-center items-center gap-3 hover:bg-darkPink rounded-tr-2xl rounded-br-2xl">
                 <span className={CurrencyToConvert.flag}></span>
                 {CurrencyToConvert.name}
@@ -106,20 +123,20 @@ export default function Inputs() {
             <input
               type="text"
               className="w-[60%] h-[5.6rem] outline-none pl-6 font-bold"
-              readOnly 
+              readOnly
               placeholder={placeHolder}
             />
             <div className="absolute top-0 w-[12rem] z-40 right-0 h-[5.6rem] flex flex-col transition-all overflow-hidden hover:h-fit hover:overflow-visible  before:content-['|'] before:absolute before:text-darkSlate before:left-[-2px] before:top-6">
               <div className="flex py-6 transition-all ease-in-out justify-center items-center gap-3 hover:bg-darkPink rounded-tr-2xl rounded-br-2xl">
-                <span className={CurrencyConverter.flag}></span>
-                {CurrencyConverter.name}
+                <span className={CurrencyConvert.flag}></span>
+                {CurrencyConvert.name}
                 <Image
                   src={require('../../assets/arrow.svg')}
                   alt="flag-image"
                 />
               </div>
 
-              <Flags ValueSelected={(Value) => setCurrencyConverter(Value)} />
+              <Flags ValueSelected={(Value) => setCurrencyConvert(Value)} />
             </div>
           </div>
         </div>
