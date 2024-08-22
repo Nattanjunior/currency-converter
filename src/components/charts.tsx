@@ -1,7 +1,6 @@
 'use client'
 
 import React from "react";
-
 import dynamic from 'next/dynamic';
 
 const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
@@ -11,6 +10,8 @@ interface ChartState {
   options: object;
   selection: string;
 }
+
+//PU1W7JUNDG05R3UG
 
 class ApexChart extends React.Component<{}, ChartState> {
   constructor(props: any) {
@@ -129,6 +130,9 @@ class ApexChart extends React.Component<{}, ChartState> {
     };
   }
 
+  async fetchData(flag: string) {
+
+  }
 
   updateData(timeline: any) {
     this.setState({
@@ -188,7 +192,7 @@ class ApexChart extends React.Component<{}, ChartState> {
         <div id="chart" >
 
           <div id="chart-timeline">
-            <ReactApexChart options={this.state.options } series={this.state.series} type="area" height={256} />
+            <ReactApexChart options={this.state.options} series={this.state.series} type="area" height={256} />
           </div>
           <div className="flex justify-between pl-[3rem] max-md:w-[25.6rem] max-md:pl-[3rem] max-md:-mt-4 ">
             <button id="one_day"
@@ -223,7 +227,7 @@ class ApexChart extends React.Component<{}, ChartState> {
             <button
 
               onClick={() => { }}>
-                MÁX
+              MÁX
             </button>
           </div>
         </div>
