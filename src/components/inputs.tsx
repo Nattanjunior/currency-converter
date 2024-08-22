@@ -5,8 +5,6 @@ import { Flags } from "./flags";
 
 import "/node_modules/flag-icons/css/flag-icons.min.css";
 import Image from "next/image";
-import { A } from "ollama/dist/shared/ollama.1164e541.js";
-import { METHODS } from "http";
 
 export type HandleProps = {
   flag: string
@@ -18,6 +16,7 @@ export default function Inputs() {
   const [CurrencyToConvert, setCurrencyToConvert] = useState<HandleProps>({ flag: 'fi fi-br fis', name: 'BRL' })
   const [CurrencyConvert, setCurrencyConvert] = useState<HandleProps>({ flag: 'fi fi-us fis', name: 'USD' })
   const [InputValue, setInputValue] = useState('')
+  const [InputValueTwo, setInputValueTwo] = useState<string>(``)
   const [placeHolder, setPlaceHolder] = useState('$ 0,00')
   const MyInput = useRef<HTMLInputElement>(null)
   const myDiv = useRef<HTMLDivElement>(null)
@@ -35,10 +34,9 @@ export default function Inputs() {
       // Adiciona separadores de milhar
       const formattedIntegerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, "."); // Expressão regular que verifica se há um ou mais grupos de 3 digitos e garante que não há mais dígitos após o grupo, entre os grupos de 3 digitos, um (.) será adicionado.
 
-      return `$${formattedIntegerPart},${decimalPart}`;
+      return `${formattedIntegerPart},${decimalPart}`;
     }
-
-    return '$';
+    return '';
   };
 
   // trocando os valores selecionados pelo usuário!
@@ -46,7 +44,6 @@ export default function Inputs() {
     setCurrencyToConvert(CurrencyConvert)
     setCurrencyConvert(CurrencyToConvert)
     setIsChange(!isChange)
-
   }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,33 +51,30 @@ export default function Inputs() {
     setInputValue(formatValue(Value))
   }
 
-  // useEffect(() => {
-  //   const fetchApiCoin = async () => {
+  useEffect(() => {
+    const fetchApiCoin = async () => {
 
-  //     const numericFormat = parseFloat(InputValue.replace(/[^\d.-]/g, ''))
+      const numericFormat = parseFloat(InputValue.replace(/[^\d,]/g, '').replace(',', '.'))
 
-  //     if(isNaN(numericFormat)) return;
-      
-  //     try {
-  //       const response = await fetch(`https://v6.exchangerate-api.com/v6/5690198e76fb65359227a7be/par/${CurrencyToConvert.name}/${CurrencyConvert.name}/${numericFormat}`,{
-  //         method:'GET'
-  //       })
+      if (isNaN(numericFormat)) return;
 
-
-  //       const data = await response.json()
-  //       console.log(data) 
-  //     } catch (error) {
-  //       console.log(error)
-  //     }
-  //   }
-  //   fetchApiCoin()
-  // }, [InputValue,CurrencyConvert,CurrencyToConvert ])
-
+      try {
+        const response = await fetch(`api/convert-coin?from=${CurrencyToConvert.name}&to=${CurrencyConvert.name}&amount=${numericFormat}`)
+        const data = await response.json()
+        const conversionResult = String(data.data.conversion_result.toFixed(2))
+        setInputValueTwo(conversionResult)
+        console.log(data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    fetchApiCoin()
+  }, [InputValue, CurrencyConvert, CurrencyToConvert])
 
 
   return (
     <>
-      <section className="max-md:w-[90%] ">
+      <section className="max-md:w-[90%]">
         <h2 className="mb-6 text-4xl">Conversor de moedas</h2>
         <div className="flex flex-wrap">
 
@@ -92,7 +86,7 @@ export default function Inputs() {
               inputMode="numeric"
               onChange={handleInputChange}
               title="Digite apenas números"
-              value={InputValue}
+              value={`$${InputValue}`}
               placeholder={placeHolder}
             />
             <div className="absolute top-0 w-[12rem] z-50 right-0 h-[5.6rem] flex flex-col transition-all overflow-hidden hover:h-fit hover:overflow-visible  before:content-['|'] before:absolute before:text-darkSlate before:left-[-2px] before:top-6"
@@ -125,6 +119,7 @@ export default function Inputs() {
               className="w-[60%] h-[5.6rem] outline-none pl-6 font-bold"
               readOnly
               placeholder={placeHolder}
+              value={`$${InputValueTwo}`}
             />
             <div className="absolute top-0 w-[12rem] z-40 right-0 h-[5.6rem] flex flex-col transition-all overflow-hidden hover:h-fit hover:overflow-visible  before:content-['|'] before:absolute before:text-darkSlate before:left-[-2px] before:top-6">
               <div className="flex py-6 transition-all ease-in-out justify-center items-center gap-3 hover:bg-darkPink rounded-tr-2xl rounded-br-2xl">
@@ -140,7 +135,6 @@ export default function Inputs() {
             </div>
           </div>
         </div>
-
       </section>
     </>
   )
